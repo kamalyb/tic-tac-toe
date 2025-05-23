@@ -1,0 +1,45 @@
+import random
+import ipywidgets as widgets
+from IPython.display import display, clear_output
+
+# Options
+options = ['Rock', 'Paper', 'Scissors']
+
+# UI Elements
+user_choice = widgets.Dropdown(
+    options=options,
+    description='Your Move:',
+    style={'description_width': 'initial'}
+)
+
+play_button = widgets.Button(description="Play!", button_style='success')
+result_output = widgets.Output()
+
+# Game logic
+def determine_winner(user, computer):
+    if user == computer:
+        return "🤝 It's a draw!"
+    elif (
+        (user == 'Rock' and computer == 'Scissors') or
+        (user == 'Scissors' and computer == 'Paper') or
+        (user == 'Paper' and computer == 'Rock')
+    ):
+        return f"✅ You win! {user} beats {computer}."
+    else:
+        return f"❌ You lose! {computer} beats {user}."
+
+# Button click event
+def play_game(b):
+    with result_output:
+        clear_output()
+        user = user_choice.value
+        computer = random.choice(options)
+        print(f"🧑 You chose: {user}")
+        print(f"🤖 Computer chose: {computer}")
+        result = determine_winner(user, computer)
+        print(result)
+
+play_button.on_click(play_game)
+
+# Display UI
+display(widgets.VBox([user_choice, play_button, result_output]))
